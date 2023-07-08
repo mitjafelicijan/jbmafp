@@ -89,6 +89,61 @@ This is my first post. It ain't much but it's an honest post.
   generator which file in `templates` folder to use and `url` tells generator
   what the file should be called when its saved.
 
+## Entities available in template
+
+### Config
+
+```txt
+Config {
+	Title        string
+	Description  string
+	BaseURL      string
+	Language     string
+	Highlighting string
+	Minify       bool
+}
+```
+
+Using it inside of a template.
+
+```html
+<div>{{ .Config.Language }}</div>
+```
+
+### Page
+
+```txt
+Page {
+	Filepath     string
+	Raw          string
+	HTML         template.HTML
+	Text         string
+	Summary      string
+	Meta         map[string]interface{}
+	Title        string
+	Type         string
+	RelPermalink string
+	Created      time.Time
+	Draft        bool
+}
+```
+
+Using it inside of a template.
+
+```html
+{{ range .Pages }}
+	{{ if eq .Type "post" }}
+		<li>
+			<a href="/{{ .RelPermalink }}">{{ .Title }}</a>
+			<div>{{ .Created.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</div>
+		</li>
+	{{ end }}
+{{ end }}
+```
+
+That `.Format` shenanigas are used for formatting `time.Time` type. You can read
+more about it on https://gosamples.dev/date-time-format-cheatsheet/.
+
 ## License
 
 [jbmafp](https://github.com/mitjafelicijan/jbmafp) was written by [Mitja
