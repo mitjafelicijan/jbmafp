@@ -48,9 +48,9 @@ jbmafp --build
 ## Understanding all this bullshit
 
 - Posts go into `content` folder.
-- You can change them in `templates` folder.
-- Each post must have. All of the fields are required. If you have ever used
-  Hugo, this is the same thing. Below is example `content/first.md`.
+- Each post must have fields defined between `---` block. All of the fields are
+  required. If you have ever used Hugo, this is the same thing. Below is example
+  `content/first.md`.
 
 ```md
 ---
