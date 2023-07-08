@@ -22,6 +22,8 @@ Some facts (will be more clear when you read the whole readme):
 - All files in `static` folder will be moved to the root of `public` folder.
 - When you provide `url` in your markdown files, this will create these files in
   the root of `public` folder. No nesting allowed.
+- Comes with a small embedded HTTP server you can invoke with `jbmafo --server`
+  which will server contents from `public` folder. Good for testing stuff.
 
 ## Install
 

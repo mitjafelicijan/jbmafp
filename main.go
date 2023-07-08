@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -89,6 +90,13 @@ func cleanHTMLTags(htmlString string) string {
 	p := bluemonday.StrictPolicy()
 	cleanString := p.Sanitize(htmlString)
 	return cleanString
+}
+
+func simpleServer(projectRoot string) {
+	fs := http.FileServer(http.Dir(path.Join(projectRoot, "public")))
+	http.Handle("/", fs)
+	log.Println("Server started on http://localhost:6969")
+	log.Fatal(http.ListenAndServe(":6969", nil))
 }
 
 func initializeProject(projectRoot string) {
@@ -353,13 +361,14 @@ func main() {
 	}
 
 	var args struct {
-		Init  bool `arg:"-i,--init" help:"initialize new project"`
-		Build bool `arg:"-b,--build" help:"build the website"`
+		Init   bool `arg:"-i,--init" help:"initialize new project"`
+		Build  bool `arg:"-b,--build" help:"build the website"`
+		Server bool `arg:"-s,--server" help:"simple embedded HTTP server"`
 	}
 
 	arg.MustParse(&args)
 
-	if !args.Init && !args.Build {
+	if !args.Init && !args.Build && !args.Server {
 		fmt.Println("No arguments provided. Try using `jbmafp --help`")
 		os.Exit(0)
 	}
@@ -370,5 +379,9 @@ func main() {
 
 	if args.Build {
 		buildProject(projectRoot)
+	}
+
+	if args.Server {
+		simpleServer(projectRoot)
 	}
 }
