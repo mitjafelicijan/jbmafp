@@ -1,3 +1,5 @@
+![kirk-rage](https://github.com/mitjafelicijan/jbmafp/assets/296714/b0e745ec-97dd-474d-836b-ee3c34759015)
+
 # Just Build Me A Fucking Page
 
 I am just so sick of all these complicated static site generators forcing you to
