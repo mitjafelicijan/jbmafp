@@ -133,10 +133,10 @@ Using it inside of a template.
 ```html
 {{ range .Pages }}
   {{ if eq .Type "post" }}
-	<li>
-	  <a href="/{{ .RelPermalink }}">{{ .Title }}</a>
-	  <div>{{ .Created.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</div>
-	</li>
+    <li>
+      <a href="/{{ .RelPermalink }}">{{ .Title }}</a>
+      <div>{{ .Created.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</div>
+    </li>
   {{ end }}
 {{ end }}
 ```
