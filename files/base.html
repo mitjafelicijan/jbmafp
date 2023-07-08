@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="{{ .Config.Language }}">
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>{{ block "title" . }}{{ .Config.Title }}{{ end }}</title>
+	<meta name="description" content="{{ block "description" . }}{{ .Config.Description }}{{ end }}">
+	<link rel="alternate" type="application/rss+xml" href="{{ .Config.BaseURL }}/index.xml">
+  </head>
+  <body>
+    <main>
+      {{ block "content" . }}{{ end }}
+    </main>
+  </body>
+</html>

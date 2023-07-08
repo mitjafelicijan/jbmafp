@@ -1,0 +1,16 @@
+title: "Title of your website"
+baseurl: "https://example.com"
+description: "My new shiny website"
+language: "en-us"
+
+# Code highlighting.
+# https://swapoff.org/chroma/playground/
+highlighting: "vs"
+
+# Minifies output HTML (including inline CSS, JS).
+minify: true
+
+# Other generaters, in this case RSS generator.
+extras:
+  - template: index.xml
+    url: index.xml

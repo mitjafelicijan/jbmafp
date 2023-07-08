@@ -1,0 +1,14 @@
+{{ template "base.html" . }}
+
+{{ define "title" }}{{ .Page.Title }}{{ end }}
+{{ define "description" }}{{ .Page.Summary }}{{ end }}
+
+{{ define "content" }}
+<div>
+  <h1>{{ .Page.Title }}</h1>
+  <p>{{ .Page.Created.Format "Jan 2, 2006" }}</p>
+  <div>
+	{{ .Page.HTML }}
+  </div>
+</div>
+{{ end }}

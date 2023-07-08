@@ -1,0 +1,14 @@
+{{ template "base.html" . }}
+
+{{ define "content" }}
+<div>  
+  <h2>Posts</h2>
+  <ul>
+	{{ range .Pages }}
+	{{ if eq .Type "post" }}
+	<li><a href="/{{ .RelPermalink }}">{{ .Title }}</a></li>
+	{{ end }}
+	{{ end }}
+  </ul>
+</div>
+{{ end }}

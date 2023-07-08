@@ -32,6 +32,8 @@ import (
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 
 	cp "github.com/otiai10/copy"
+
+	_ "embed"
 )
 
 type ConfigExtrasItem struct {
@@ -64,6 +66,24 @@ type Page struct {
 	Draft        bool
 }
 
+//go:embed "files/config.yaml"
+var EmbedConfig string
+
+//go:embed "files/first.md"
+var EmbedPost string
+
+//go:embed "files/base.html"
+var EmbedTemplateBase string
+
+//go:embed "files/index.html"
+var EmbedTemplateIndex string
+
+//go:embed "files/post.html"
+var EmbedTemplatePost string
+
+//go:embed "files/index.xml"
+var EmbedTemplateFeed string
+
 // Function to clean HTML tags using bluemonday.
 func cleanHTMLTags(htmlString string) string {
 	p := bluemonday.StrictPolicy()
@@ -72,38 +92,36 @@ func cleanHTMLTags(htmlString string) string {
 }
 
 func initializeProject(projectRoot string) {
-	fmt.Println("Initializing new project")
+	log.Println("Initializing new project")
+
+	if err := os.Mkdir(path.Join(projectRoot, "templates"), 0755); err != nil && !os.IsExist(err) {
+		log.Println("Error creating directory:", err)
+		return
+	}
+
+	if err := os.Mkdir(path.Join(projectRoot, "content"), 0755); err != nil && !os.IsExist(err) {
+		log.Println("Error creating directory:", err)
+		return
+	}
+
+	if err := os.Mkdir(path.Join(projectRoot, "static"), 0755); err != nil && !os.IsExist(err) {
+		log.Println("Error creating directory:", err)
+		return
+	}
+
+	os.WriteFile(path.Join(projectRoot, "templates", ".gitkeep"), []byte{}, 0755)
+	os.WriteFile(path.Join(projectRoot, "content", ".gitkeep"), []byte{}, 0755)
+	os.WriteFile(path.Join(projectRoot, "static", ".gitkeep"), []byte{}, 0755)
+
+	os.WriteFile(path.Join(projectRoot, "config.yaml"), []byte(EmbedConfig), 0755)
+	os.WriteFile(path.Join(projectRoot, "content", "first.md"), []byte(EmbedPost), 0755)
+	os.WriteFile(path.Join(projectRoot, "templates", "base.html"), []byte(EmbedTemplateBase), 0755)
+	os.WriteFile(path.Join(projectRoot, "templates", "index.html"), []byte(EmbedTemplateIndex), 0755)
+	os.WriteFile(path.Join(projectRoot, "templates", "post.html"), []byte(EmbedTemplatePost), 0755)
+	os.WriteFile(path.Join(projectRoot, "templates", "index.xml"), []byte(EmbedTemplateFeed), 0755)
 }
 
-func main() {
-	projectRoot := os.Getenv("PROJECT_ROOT")
-	if projectRoot == "" {
-		projectRoot = "./"
-	}
-
-	fmt.Println("Come back later! Still WIP!")
-	os.Exit(0)
-
-	// Parsing arguments.
-	var args struct {
-		Init  bool `arg:"-i,--init" help:"initialize new project"`
-		Build bool `arg:"-b,--build" help:"build the website"`
-	}
-
-	arg.MustParse(&args)
-
-	if !args.Init && !args.Build {
-		fmt.Println("No arguments provided. Try using `jbmafp --help`")
-		os.Exit(0)
-	}
-
-	if args.Init {
-		initializeProject(projectRoot)
-		os.Exit(0)
-	}
-
-	os.Exit(0)
-
+func buildProject(projectRoot string) {
 	// Read config file.
 	configFilepath := path.Join(projectRoot, "config.yaml")
 	configFile, err := os.ReadFile(configFilepath)
@@ -195,6 +213,12 @@ func main() {
 		return pages[i].Created.After(pages[j].Created)
 	})
 
+	// Creates public folder if it doesn't exist yet.
+	if err := os.Mkdir(path.Join(projectRoot, "public"), 0755); err != nil && !os.IsExist(err) {
+		log.Println("Error creating directory:", err)
+		return
+	}
+
 	// Generate HTML files for all pages.
 	for _, page := range pages {
 		outFilepath := path.Join(projectRoot, "public", page.Meta["url"].(string))
@@ -237,9 +261,7 @@ func main() {
 			log.Println("Wrote", outFilepath)
 		} else {
 			log.Println("Skipped", outFilepath)
-
 		}
-
 	}
 
 	// Generates index page.
@@ -317,10 +339,36 @@ func main() {
 
 			outFilepath := path.Join(projectRoot, "public", extra.URL)
 			os.WriteFile(outFilepath, []byte(buf.String()), 0755)
-
 		}
 	}
 
 	// Guess we are done!
 	log.Println("Done & done...")
+}
+
+func main() {
+	projectRoot := os.Getenv("PROJECT_ROOT")
+	if projectRoot == "" {
+		projectRoot = "./"
+	}
+
+	var args struct {
+		Init  bool `arg:"-i,--init" help:"initialize new project"`
+		Build bool `arg:"-b,--build" help:"build the website"`
+	}
+
+	arg.MustParse(&args)
+
+	if !args.Init && !args.Build {
+		fmt.Println("No arguments provided. Try using `jbmafp --help`")
+		os.Exit(0)
+	}
+
+	if args.Init {
+		initializeProject(projectRoot)
+	}
+
+	if args.Build {
+		buildProject(projectRoot)
+	}
 }
