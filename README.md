@@ -95,12 +95,12 @@ This is my first post. It ain't much but it's an honest post.
 
 ```txt
 Config {
-	Title        string
-	Description  string
-	BaseURL      string
-	Language     string
-	Highlighting string
-	Minify       bool
+  Title        string
+  Description  string
+  BaseURL      string
+  Language     string
+  Highlighting string
+  Minify       bool
 }
 ```
 
@@ -114,17 +114,17 @@ Using it inside of a template.
 
 ```txt
 Page {
-	Filepath     string
-	Raw          string
-	HTML         template.HTML
-	Text         string
-	Summary      string
-	Meta         map[string]interface{}
-	Title        string
-	Type         string
-	RelPermalink string
-	Created      time.Time
-	Draft        bool
+  Filepath     string
+  Raw          string
+  HTML         template.HTML
+  Text         string
+  Summary      string
+  Meta         map[string]interface{}
+  Title        string
+  RelPermalink string
+  Type         string
+  Created      time.Time
+  Draft        bool
 }
 ```
 
@@ -132,12 +132,12 @@ Using it inside of a template.
 
 ```html
 {{ range .Pages }}
-	{{ if eq .Type "post" }}
-		<li>
-			<a href="/{{ .RelPermalink }}">{{ .Title }}</a>
-			<div>{{ .Created.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</div>
-		</li>
-	{{ end }}
+  {{ if eq .Type "post" }}
+	<li>
+	  <a href="/{{ .RelPermalink }}">{{ .Title }}</a>
+	  <div>{{ .Created.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</div>
+	</li>
+  {{ end }}
 {{ end }}
 ```
 
