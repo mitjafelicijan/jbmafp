@@ -23,6 +23,7 @@ import (
 
 	"github.com/DavidBelicza/TextRank/v2"
 	"github.com/alexflint/go-arg"
+	"github.com/gosimple/slug"
 	"github.com/microcosm-cc/bluemonday"
 
 	"github.com/tdewolff/minify/v2"
@@ -354,6 +355,39 @@ func buildProject(projectRoot string) {
 	log.Println("Done & done...")
 }
 
+func newPage(projectRoot string, title string) {
+	slug := slug.Make(title)
+	t := time.Now()
+	filename := fmt.Sprintf("%s-%s.md", t.Format("2006-01-02"), slug)
+
+	var lines = []string{
+		"---",
+		fmt.Sprintf("title: \"%s\"", title),
+		fmt.Sprintf("url: %s.html", slug),
+		fmt.Sprintf("date: %s", t.Format("2006-01-02T15:04:05-07:00")),
+		"type: post",
+		"draft: true",
+		"---",
+		"",
+		"Content...",
+	}
+
+	f, err := os.Create(path.Join(projectRoot, "content", filename))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	for _, line := range lines {
+		_, err := f.WriteString(line + "\n")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	log.Printf("Page `%s` created\n", filename)
+}
+
 func main() {
 	projectRoot := os.Getenv("PROJECT_ROOT")
 	if projectRoot == "" {
@@ -361,14 +395,16 @@ func main() {
 	}
 
 	var args struct {
-		Init   bool `arg:"-i,--init" help:"initialize new project"`
-		Build  bool `arg:"-b,--build" help:"build the website"`
-		Server bool `arg:"-s,--server" help:"simple embedded HTTP server"`
+		Init   bool   `arg:"-i,--init" help:"initialize new project"`
+		Build  bool   `arg:"-b,--build" help:"build the website"`
+		Server bool   `arg:"-s,--server" help:"simple embedded HTTP server"`
+		New    bool   `arg:"-n,--new" help:"create new page"`
+		Title  string `arg:"positional"`
 	}
 
 	arg.MustParse(&args)
 
-	if !args.Init && !args.Build && !args.Server {
+	if !args.Init && !args.Build && !args.Server && !args.New {
 		fmt.Println("No arguments provided. Try using `jbmafp --help`")
 		os.Exit(0)
 	}
@@ -383,5 +419,13 @@ func main() {
 
 	if args.Server {
 		simpleServer(projectRoot)
+	}
+
+	if args.New {
+		if len(args.Title) == 0 {
+			fmt.Println("You must provide a title for the new page")
+			os.Exit(1)
+		}
+		newPage(projectRoot, args.Title)
 	}
 }

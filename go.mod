@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/DavidBelicza/TextRank/v2 v2.1.3
 	github.com/alexflint/go-arg v1.4.3
+	github.com/gosimple/slug v1.13.1
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/otiai10/copy v1.12.0
 	github.com/tdewolff/minify/v2 v2.12.7
@@ -20,6 +21,7 @@ require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
+	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/tdewolff/parse/v2 v2.6.6 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
