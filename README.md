@@ -24,6 +24,9 @@ Some facts (will be more clear when you read the whole readme):
   the root of `public` folder. No nesting allowed.
 - Comes with a small embedded HTTP server you can invoke with `jbmafo --server`
   which will server contents from `public` folder. Good for testing stuff.
+- After you have made your site you can easily create new content with `jbmafp
+  --new "My new shitty title"`. This will create a new markdown file in content
+  folder.
 
 ## Install
 
