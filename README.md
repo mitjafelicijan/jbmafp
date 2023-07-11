@@ -150,5 +150,5 @@ more about it on https://gosamples.dev/date-time-format-cheatsheet/.
 ## License
 
 [jbmafp](https://github.com/mitjafelicijan/jbmafp) was written by [Mitja
-Felicijan](https://mitjafelicijan.com) and is released under the BSD two-clause
+Felicijan](https://mitjafelicijan.com) and is released under the BSD zero-clause
 license, see the LICENSE file for more information.
