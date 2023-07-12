@@ -16,8 +16,9 @@ The only thing hard about this project is the spelling of its name.
 
 Some facts (will be more clear when you read the whole readme):
 
-- You cannot nest your markdown file under `content` folder. All files must be
-  in the root of `content` folder.
+- You can nest your markdown file under `content` folder. You can use subfolders
+  as well. Final URL will not be affected by putting markdown files in
+  subfolders.
 - `public` folder gets automatically created on `jbmafp --build`.
 - All files in `static` folder will be moved to the root of `public` folder.
 - When you provide `url` in your markdown files, this will create these files in
@@ -25,8 +26,8 @@ Some facts (will be more clear when you read the whole readme):
 - Comes with a small embedded HTTP server you can invoke with `jbmafo --server`
   which will server contents from `public` folder. Good for testing stuff.
 - After you have made your site you can easily create new content with `jbmafp
-  --new "My new shitty title"`. This will create a new markdown file in content
-  folder.
+  --new "My new shitty title"`. This will create a new markdown file in
+  `content` folder.
 
 ## Install
 

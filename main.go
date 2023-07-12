@@ -144,9 +144,22 @@ func buildProject(projectRoot string) {
 	}
 
 	// Gets the list of all markdown files.
-	files, err := filepath.Glob(path.Join(projectRoot, "content/*.md"))
+	var files []string
+	err = filepath.Walk(path.Join(projectRoot, "content/"), func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() && strings.ToLower(filepath.Ext(path)) == ".md" {
+			files = append(files, path)
+		}
+
+		return nil
+	})
+
 	if err != nil {
-		panic(err)
+		fmt.Printf("No markdown files found with error `%s`.\n", err)
+		os.Exit(1)
 	}
 
 	md := goldmark.New(
