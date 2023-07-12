@@ -42,8 +42,8 @@ go install .
 - Go to your projects folder or wherever you want to place the site.
 
 ```sh
-mkdir my-ugly-website
-cd my-ugly-website
+mkdir my-shitty-website
+cd my-shitty-website
 jbmafp --init
 jbmafp --build
 ```
