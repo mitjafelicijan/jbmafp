@@ -165,6 +165,9 @@ func buildProject(projectRoot string) {
 	md := goldmark.New(
 		goldmark.WithExtensions(
 			extension.GFM,
+			extension.Table,
+			extension.TaskList,
+			extension.Footnote,
 			meta.Meta,
 			highlighting.NewHighlighting(
 				highlighting.WithStyle(config.Highlighting),
