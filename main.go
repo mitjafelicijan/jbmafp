@@ -24,6 +24,7 @@ import (
 	"github.com/DavidBelicza/TextRank/v2"
 	"github.com/alexflint/go-arg"
 	"github.com/gosimple/slug"
+	"github.com/mangoumbrella/goldmark-figure"
 	"github.com/microcosm-cc/bluemonday"
 
 	"github.com/tdewolff/minify/v2"
@@ -169,6 +170,7 @@ func buildProject(projectRoot string) {
 			extension.TaskList,
 			extension.Footnote,
 			meta.Meta,
+			figure.Figure,
 			highlighting.NewHighlighting(
 				highlighting.WithStyle(config.Highlighting),
 			),
