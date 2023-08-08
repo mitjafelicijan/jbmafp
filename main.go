@@ -94,6 +94,27 @@ func cleanHTMLTags(htmlString string) string {
 	return cleanString
 }
 
+func includeTemplateList(projectRoot string) []string {
+	var templateFiles []string
+	includesTemplatePathname := path.Join(projectRoot, "templates/includes")
+	err := filepath.Walk(includesTemplatePathname, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if filepath.Ext(path) == ".html" {
+			templateFiles = append(templateFiles, path)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	return templateFiles
+}
+
 func simpleServer(projectRoot string) {
 	fs := http.FileServer(http.Dir(path.Join(projectRoot, "public")))
 	http.Handle("/", fs)
@@ -105,6 +126,11 @@ func initializeProject(projectRoot string) {
 	log.Println("Initializing new project")
 
 	if err := os.Mkdir(path.Join(projectRoot, "templates"), 0755); err != nil && !os.IsExist(err) {
+		log.Println("Error creating directory:", err)
+		return
+	}
+
+	if err := os.Mkdir(path.Join(projectRoot, "templates", "includes"), 0755); err != nil && !os.IsExist(err) {
 		log.Println("Error creating directory:", err)
 		return
 	}
@@ -253,7 +279,12 @@ func buildProject(projectRoot string) {
 			pageTemplateFilename := fmt.Sprintf("%s.html", page.Meta["type"].(string))
 			templatePathname := path.Join(projectRoot, "templates", pageTemplateFilename)
 			baseTemplatePathname := path.Join(projectRoot, "templates/base.html")
-			t, err := template.ParseFiles(baseTemplatePathname, templatePathname)
+
+			templates := includeTemplateList(projectRoot)
+			templates = append([]string{templatePathname}, templates...)
+			templates = append([]string{baseTemplatePathname}, templates...)
+
+			t, err := template.ParseFiles(templates...)
 			if err != nil {
 				panic(err)
 			}
@@ -293,10 +324,16 @@ func buildProject(projectRoot string) {
 
 	// Generates index page.
 	{
+
 		log.Println("Writing index...")
 		templatePathname := path.Join(projectRoot, "templates/index.html")
 		baseTemplatePathname := path.Join(projectRoot, "templates/base.html")
-		t, err := template.ParseFiles(baseTemplatePathname, templatePathname)
+
+		templates := includeTemplateList(projectRoot)
+		templates = append([]string{templatePathname}, templates...)
+		templates = append([]string{baseTemplatePathname}, templates...)
+
+		t, err := template.ParseFiles(templates...)
 		if err != nil {
 			panic(err)
 		}
