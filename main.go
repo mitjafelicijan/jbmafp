@@ -292,12 +292,14 @@ func buildProject(projectRoot string) {
 			type Payload struct {
 				Config Config
 				Page   Page
+				Pages  []Page
 			}
 
 			var buf bytes.Buffer
 			err = t.Execute(&buf, Payload{
 				Config: config,
 				Page:   page,
+				Pages:  pages,
 			})
 			if err != nil {
 				panic(err)
