@@ -148,6 +148,16 @@ Using it inside of a template.
 That `.Format` shenanigas are used for formatting `time.Time` type. You can read
 more about it on https://gosamples.dev/date-time-format-cheatsheet/.
 
+## Payload available on page generation
+
+```txt
+Payload {
+	Config
+	Page
+	Pages
+})
+```
+
 ## License
 
 [jbmafp](https://github.com/mitjafelicijan/jbmafp) was written by [Mitja
