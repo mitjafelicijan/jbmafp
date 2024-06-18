@@ -158,6 +158,35 @@ Payload {
 })
 ```
 
+## Special filters
+
+- first (gets first N posts)
+- last (gets last N posts)
+- random (gets random N posts)
+
+```html
+<!-- First 10 pages -->
+{{ range first 10 .Pages }}
+  {{ if and (eq .Type "post") (not .Draft) }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ end }}
+{{ end }}
+
+<!-- Last 10 pages -->
+{{ range last 10 .Pages }}
+  {{ if and (eq .Type "post") (not .Draft) }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ end }}
+{{ end }}
+
+<!-- Random 10 pages -->
+{{ range random 10 .Pages }}
+  {{ if and (eq .Type "post") (not .Draft) }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ end }}
+{{ end }}
+```
+
 ## License
 
 [jbmafp](https://github.com/mitjafelicijan/jbmafp) was written by [Mitja
