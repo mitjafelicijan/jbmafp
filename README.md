@@ -152,10 +152,10 @@ more about it on https://gosamples.dev/date-time-format-cheatsheet/.
 
 ```txt
 Payload {
-	Config
-	Page
-	Pages
-})
+  Config
+  Page
+  Pages
+}
 ```
 
 ## Special filters
