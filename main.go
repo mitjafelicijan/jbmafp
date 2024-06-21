@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
-	"reflect"
 	"sort"
 	"strings"
 	"time"
@@ -88,50 +86,6 @@ var EmbedTemplatePost string
 
 //go:embed "files/index.xml"
 var EmbedTemplateFeed string
-
-// firstN returns the first n items of a slice.
-func firstN(n int, items interface{}) interface{} {
-	v := reflect.ValueOf(items)
-	if v.Kind() != reflect.Slice {
-		panic("firstN: not a slice")
-	}
-	if v.Len() < n {
-		return items
-	}
-	return v.Slice(0, n).Interface()
-}
-
-// lastN returns the last n items of any slice.
-func lastN(n int, items interface{}) interface{} {
-	v := reflect.ValueOf(items)
-	if v.Kind() != reflect.Slice {
-		panic("lastN: not a slice")
-	}
-	l := v.Len()
-	if l < n {
-		return items
-	}
-	return v.Slice(l-n, l).Interface()
-}
-
-// randomN returns n random items of any slice.
-func randomN(n int, items interface{}) interface{} {
-	v := reflect.ValueOf(items)
-	if v.Kind() != reflect.Slice {
-		panic("randomN: not a slice")
-	}
-	l := v.Len()
-	if l < n {
-		return items
-	}
-	rand.Seed(time.Now().UnixNano())
-	indices := rand.Perm(l)[:n]
-	result := reflect.MakeSlice(v.Type(), n, n)
-	for i, idx := range indices {
-		result.Index(i).Set(v.Index(idx))
-	}
-	return result.Interface()
-}
 
 // Function to clean HTML tags using bluemonday.
 func cleanHTMLTags(htmlString string) string {
@@ -318,6 +272,13 @@ func buildProject(projectRoot string) {
 		return
 	}
 
+	filters := template.FuncMap{
+		"first":  firstN,
+		"last":   lastN,
+		"random": randomN,
+		"filterbytype": filterByType,
+	}
+
 	// Generate HTML files for all pages.
 	for _, page := range pages {
 		outFilepath := path.Join(projectRoot, "public", page.Meta["url"].(string))
@@ -330,11 +291,7 @@ func buildProject(projectRoot string) {
 			templates = append([]string{templatePathname}, templates...)
 			templates = append([]string{baseTemplatePathname}, templates...)
 
-			t, err := template.New("base.html").Funcs(template.FuncMap{
-				"first":  firstN,
-				"last":   lastN,
-				"random": randomN,
-			}).ParseFiles(templates...)
+			t, err := template.New("base.html").Funcs(filters).ParseFiles(templates...)
 			if err != nil {
 				panic(err)
 			}
@@ -385,11 +342,7 @@ func buildProject(projectRoot string) {
 		templates = append([]string{templatePathname}, templates...)
 		templates = append([]string{baseTemplatePathname}, templates...)
 
-		t, err := template.New("base.html").Funcs(template.FuncMap{
-			"first":  firstN,
-			"last":   lastN,
-			"random": randomN,
-		}).ParseFiles(templates...)
+		t, err := template.New("base.html").Funcs(filters).ParseFiles(templates...)
 		if err != nil {
 			panic(err)
 		}

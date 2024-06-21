@@ -163,25 +163,40 @@ Payload {
 - first (gets first N posts)
 - last (gets last N posts)
 - random (gets random N posts)
+- filterbytype (get just the posts with specific type)
 
 ```html
 <!-- First 10 pages -->
-{{ range first 10 .Pages }}
+{{ range .Pages | first 10 }}
   {{ if and (eq .Type "post") (not .Draft) }}
     <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
   {{ end }}
 {{ end }}
 
 <!-- Last 10 pages -->
-{{ range last 10 .Pages }}
+{{ range .Pages | last 10 }}
   {{ if and (eq .Type "post") (not .Draft) }}
     <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
   {{ end }}
 {{ end }}
 
 <!-- Random 10 pages -->
-{{ range random 10 .Pages }}
+{{ range .Pages | random 10 }}
   {{ if and (eq .Type "post") (not .Draft) }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ end }}
+{{ end }}
+
+<!-- Filter by type -->
+{{ range .Pages | filterbytype "post" }}
+  {{ if not .Draft }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ end }}
+{{ end }}
+
+<!-- Chain multiple together -->
+{{ range .Pages | filterbytype "post" | random 20 | first 5 }}
+  {{ if not .Draft }}
     <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
   {{ end }}
 {{ end }}
