@@ -1,0 +1,10 @@
+language: go
+sudo: false
+  
+matrix:
+  include:
+    - go: "1.15"
+  
+script:
+  - go mod vendor
+  - go test ./...

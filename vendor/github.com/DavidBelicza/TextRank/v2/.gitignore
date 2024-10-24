@@ -1,0 +1,6 @@
+/.vscode
+/.idea
+/pkg
+/bin
+/install.sh
+/vendor
